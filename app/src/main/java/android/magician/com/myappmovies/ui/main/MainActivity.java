@@ -14,7 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
-    //        implements SharedPreferences.OnSharedPreferenceChangeListener
+
     private static final String LOG_TAG = MainActivity.class.getName();
 
     @Override
@@ -24,7 +24,6 @@ public class MainActivity extends AppCompatActivity {
         //set toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         // Check that the activity is using the layout version with
         // the fragment_container FrameLayout
         if (findViewById(R.id.fragment_container_list) != null) {
@@ -69,31 +68,5 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
-//    //TODO:(2) move this inside Fragment?? or inside data and use repository to get the values when create URL
-//    // and start connection
-//    // Updates the screen if the shared preferences change. This method is required when you make a
-//    // class implement OnSharedPreferenceChangedListener
-//    @Override
-//    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-//        Log.d(LOG_TAG, "onSharedPreferenceChanged");
-//        if (key.equals(getString(R.string.pref_sort_key))) {
-//            // TODO:(3) pass the new value to the network or db to generate new List order
-//            MainActivityFragment newListFragment = new MainActivityFragment();
-//            // Add the fragment to the 'fragment_container' FrameLayout
-//            getSupportFragmentManager().beginTransaction()
-//                    .replace(R.id.fragment_container_list, newListFragment)
-//                    .commit();
-//
-//        }
-//
-//    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-//        // Unregister VisualizerActivity as an OnPreferenceChangedListener to avoid any memory leaks.
-//        PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(this);
-    }
 
 }

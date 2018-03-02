@@ -40,21 +40,30 @@ public class MainActivityFragment extends Fragment implements SharedPreferences.
         // Required empty public constructor
     }
 
-
     //TODO:(2) move this inside Fragment?? or inside data and use repository to get the values when create URL
     // and start connection
     // Updates the screen if the shared preferences change. This method is required when you make a
     // class implement OnSharedPreferenceChangedListener
     @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        Log.d(LOG_TAG, "onSharedPreferenceChanged");
-        if (key.equals(getString(R.string.pref_sort_key))) {
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {//worked
+        Log.i(LOG_TAG, "Settings key changed: " + key);
+        if (key.equals(getString(R.string.pref_sort_key))) {//still can't update data on fragment liast
+            Log.i(LOG_TAG, "True : " + key);
             // TODO:(3) pass the new value to the network or db to generate new List order
             subscribeUi();
-            mMoviesAdapter.notifyDataSetChanged();
         }
 
     }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //listener on changed sort order preference: //worked
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        prefs.registerOnSharedPreferenceChangeListener(this);
+
+    }
+
 
     public interface OnImageClickListener {
         void onImageSelected(int position);
@@ -113,6 +122,7 @@ public class MainActivityFragment extends Fragment implements SharedPreferences.
         }
 
     }
+
 
     @Override
     public void onDestroyView() {

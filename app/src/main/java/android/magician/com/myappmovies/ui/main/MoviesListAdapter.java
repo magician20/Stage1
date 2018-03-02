@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -45,8 +46,12 @@ class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.MoviesLis
         //Poster  image //i got problem when i build the uri for image
         //Glide.with(mContext).load(NetworkInfos.getImageUrlString(filePath)).into(holder.mMoviePoster);
         //Picasso fit()
-        Picasso.with(mContext).load(NetworkInfos.getImageUrlString(filePath)).fit().into(holder.mMoviePoster);
-
+        if (NetworkInfos.isNetworkConnectionAvailable(mContext)) {
+            Picasso.with(mContext).load(NetworkInfos.getImageUrlString(filePath)).fit().into(holder.mMoviePoster);
+        } else {
+            Picasso.with(mContext).load(NetworkInfos.getImageUrlString(filePath))
+                    .networkPolicy(NetworkPolicy.OFFLINE).into(holder.mMoviePoster);
+        }
 
         //  Movie  Vote Average
         holder.mVoteAverage.setText(movie.getVoteAverage());
