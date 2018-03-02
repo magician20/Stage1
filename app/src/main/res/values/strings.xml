@@ -1,0 +1,43 @@
+<resources>
+    <string name="app_name">MyAppMovies</string>
+
+
+    //settings ,also use as the movieName of activity
+    <string name="action_settings">Settings</string>
+
+    <string name="list_behavior">List behavior</string>
+
+    <string name="pref_sort_label">Sort by</string>
+    <string name="pref_sort_key" translatable="false">sort</string>
+
+
+    <string name="pref_sort_default_value" translatable="false">@string/pref_sort_value_popularity_asc</string>
+
+
+    <!-- Label for sort preference Popularity -->
+    <string name="pref_sort_label_popularity_asc">Popularity asc</string>
+    <string name="pref_sort_label_popularity_desc">Popularity dec</string>
+    <!-- Values for sort preference  Popularity-->
+    <string name="pref_sort_value_popularity_asc" translatable="false">popularityAsc</string>
+    <string name="pref_sort_value_popularity_desc" translatable="false">popularityDec</string>
+
+
+    <!-- Label for sort preference  Vote -->
+    <string name="pref_sort_label_vote_asc">Vote Average asc</string>
+    <string name="pref_sort_label_vote_desc">Vote Average dec</string>
+    <!-- Values for sort preference  Vote -->
+    <string name="pref_sort_value_vote_asc" translatable="false">voteAsc</string>
+    <string name="pref_sort_value_vote_desc" translatable="false">voteDec</string>
+
+    <!-- Label for sort preference Release Date -->
+    <string name="pref_sort_label_date_asc">Release Date asc</string>
+    <string name="pref_sort_label_date_desc">Release Date dec</string>
+    <!-- Values for sort preference Release Date -->
+    <string name="pref_sort_value_date_asc" translatable="false">dateAsc</string>
+    <string name="pref_sort_value_date_desc" translatable="false">dateDec</string>
+
+    <!-- Movie item list -->
+    <string name="card_image_descip">Movies Cover</string>
+
+
+</resources>
