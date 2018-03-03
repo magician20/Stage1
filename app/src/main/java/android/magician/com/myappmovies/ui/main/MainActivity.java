@@ -16,6 +16,7 @@ import android.view.MenuItem;
 public class MainActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = MainActivity.class.getName();
+    private SharedPreferences.OnSharedPreferenceChangeListener prefListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +46,29 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+                //listener on changed sort order preference:
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        prefListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+            public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+                Log.i(LOG_TAG,"Settings key changed: " + key);
+                if (key.equals(getString(R.string.pref_sort_key))) {
+                    // TODO:(3) replace the old fragment with new one's
+                    MainActivityFragment newListFragment = new MainActivityFragment();
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container_list, newListFragment)
+                            .commitAllowingStateLoss();
+                }
+
+            }
+        };
+        prefs.registerOnSharedPreferenceChangeListener(prefListener);
+
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -68,5 +92,10 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Unregister VisualizerActivity as an OnPreferenceChangedListener to avoid any memory leaks.
+        PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(prefListener);
+    }
 }

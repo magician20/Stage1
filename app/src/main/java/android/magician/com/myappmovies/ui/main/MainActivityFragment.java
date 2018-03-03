@@ -1,10 +1,7 @@
 package android.magician.com.myappmovies.ui.main;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.SharedPreferences;
 import android.magician.com.myappmovies.R;
-import android.magician.com.myappmovies.data.model.Movie;
 import android.magician.com.myappmovies.utilities.InjectorUtils;
 import android.magician.com.myappmovies.utilities.NetworkInfos;
 import android.support.annotation.Nullable;
@@ -21,13 +18,10 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import java.util.List;
-
-
 /**
- * A placeholder fragment containing a simple view.
+ * A placeholder fragment containing a simple view.  //implements SharedPreferences.OnSharedPreferenceChangeListener
  */
-public class MainActivityFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class MainActivityFragment extends Fragment  {
     private final static String LOG_TAG = MainActivityFragment.class.getSimpleName();
     public static final String KEY_MOVIES_LIST = "moviesList";
     private final int NUMBER_OF_COLUMNS = 2;
@@ -44,42 +38,42 @@ public class MainActivityFragment extends Fragment implements SharedPreferences.
         // Required empty public constructor
     }
 
-    //TODO:(2) move this inside Fragment?? or inside data and use repository to get the values when create URL
-    // and start connection
-    // Updates the screen if the shared preferences change. This method is required when you make a
-    // class implement OnSharedPreferenceChangedListener
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {//worked
-        Log.i(LOG_TAG, "Settings key changed: " + key);
-        hideListMovies();
-        if (key.equals(getString(R.string.pref_sort_key))) {//still can't update data on fragment liast
-            Log.i(LOG_TAG, "True : " + key);
-            // TODO:(3) pass the new value to the network or db to generate new List order
-            mMainViewModel.getMoviesList().observe(this, new Observer<List<Movie>>() {
-                @Override
-                public void onChanged(@Nullable List<Movie> movies) {
-                    mMoviesAdapter.swapList(movies);
-                    showListMovies();
-                }
-            });
+//    //(2) move this inside Fragment?? or inside data and use repository to get the values when create URL
+//    // and start connection
+//    // Updates the screen if the shared preferences change. This method is required when you make a
+//    // class implement OnSharedPreferenceChangedListener
+//    @Override
+//    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {//worked
+//        Log.i(LOG_TAG, "Settings key changed: " + key);
+//        hideListMovies();
+//        if (key.equals(getString(R.string.pref_sort_key))) {//still can't update data on fragment liast
+//            Log.i(LOG_TAG, "True : " + key);
+//            // TODO:(3) pass the new value to the network or db to generate new List order
+//            mMainViewModel.getMoviesList().observe(this, new Observer<List<Movie>>() {
+//                @Override
+//                public void onChanged(@Nullable List<Movie> movies) {
+//                    mMoviesAdapter.swapList(movies);
+//                    showListMovies();
+//                }
+//            });
+//
+//        }
+//
+//    }
 
-        }
-
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        //listener on changed sort order preference: //worked
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        prefs.registerOnSharedPreferenceChangeListener(this);
-
-    }
+//    @Override
+//    public void onCreate(@Nullable Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        //listener on changed sort order preference: //worked
+//        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+//        prefs.registerOnSharedPreferenceChangeListener(this);
+//
+//    }
 
 
-    public interface OnImageClickListener {
-        void onImageSelected(int position);
-    }
+//    public interface OnImageClickListener {
+//        void onImageSelected(int position);
+//    }
 
 //    @Override
 //    public void onAttach(Context context) {
@@ -135,12 +129,12 @@ public class MainActivityFragment extends Fragment implements SharedPreferences.
     }
 
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        // Unregister VisualizerActivity as an OnPreferenceChangedListener to avoid any memory leaks.
-        PreferenceManager.getDefaultSharedPreferences(getActivity()).unregisterOnSharedPreferenceChangeListener(this);
-    }
+//    @Override
+//    public void onDestroyView() {
+//        super.onDestroyView();
+//        // Unregister VisualizerActivity as an OnPreferenceChangedListener to avoid any memory leaks.
+//        PreferenceManager.getDefaultSharedPreferences(getActivity()).unregisterOnSharedPreferenceChangeListener(this);
+//    }
 
     /* observe the data & pass it to the adapter*/
     private void subscribeUi() {
