@@ -15,7 +15,6 @@
         <!-- Main Activity  >> I add standard  lunch mode work else not -->
         <activity
             android:name=".ui.main.MainActivity"
-            android:launchMode="singleTop"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>

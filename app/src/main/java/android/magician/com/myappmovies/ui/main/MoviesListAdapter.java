@@ -80,9 +80,40 @@ class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.MoviesLis
             mMoviesList = newMoviesList;
             notifyItemRangeInserted(0, newMoviesList.size());//instead of notifyDataSetChanged();
         } else {//where setting is change and i had List!=null              //problem here
-            mMoviesList.clear();
-            mMoviesList.addAll(newMoviesList);
-            notifyItemRangeInserted(0, newMoviesList.size());//instead of notifyDataSetChanged();
+           /*
+              Otherwise we use DiffUtil to calculate the changes and update accordingly. This
+              shows the four methods you need to override to return a DiffUtil callback. The
+              old list is the current list stored in mMenuItems, where the new list is the new
+               values passed in from the observing the database.
+              **/
+            DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new DiffUtil.Callback() {
+                @Override
+                public int getOldListSize() {
+                    return mMoviesList.size();
+                }
+
+                @Override
+                public int getNewListSize() {
+                    return newMoviesList.size();
+                }
+
+                @Override
+                public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+                    return mMoviesList.get(oldItemPosition).getId() == newMoviesList.get(newItemPosition).getId();
+                }
+
+                @Override
+                public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+                    Movie oldItem = mMoviesList.get(oldItemPosition);
+                    Movie newItem = newMoviesList.get(newItemPosition);
+                    return oldItem.getId() == newItem.getId()
+                            && oldItem.getMovieName().equalsIgnoreCase(newItem.getMovieName())
+                            && oldItem.getVoteAverage().equalsIgnoreCase(newItem.getVoteAverage())
+                            && oldItem.getReleaseDate().equalsIgnoreCase(newItem.getReleaseDate());//error start here no image stored(null)
+                }
+            });
+            mMoviesList = newMoviesList;
+            diffResult.dispatchUpdatesTo(this);
         }
     }
 
