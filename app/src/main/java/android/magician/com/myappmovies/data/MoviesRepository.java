@@ -52,7 +52,6 @@ public class MoviesRepository {
     /**
      * Creates periodic sync tasks and checks to see if an immediate sync is required. If an
      * immediate sync is required, this method will take care of making sure that sync occurs.
-     * >>used  with getData() methods(because if data from server mean it will be exhibited for changing)
      */
     private void initializeData() {
         // Only perform initialization once per app lifetime. If initialization has already been
@@ -76,7 +75,7 @@ public class MoviesRepository {
 /* ---------------------------------------------------------------------------------------------- */
   //this data not persist in DB
     public LiveData<List<Movie>>  getMoviesList() {
-        initializeData();
+        initializeData();//determine if i need to use service or not
         return mMoviesList;
     }
 }

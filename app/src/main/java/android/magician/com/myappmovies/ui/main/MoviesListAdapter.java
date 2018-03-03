@@ -7,6 +7,7 @@ import android.magician.com.myappmovies.utilities.NetworkInfos;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import java.util.List;
  */
 
 class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.MoviesListAdapterViewHolder> {
+    private final static String LOG_TAG = MoviesListAdapter.class.getSimpleName();
     private final Context mContext;
     private List<Movie> mMoviesList;
 
@@ -74,43 +76,13 @@ class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.MoviesLis
      */
     void swapList(final List<Movie> newMoviesList) {
         if (mMoviesList == null) {
+            Log.i(LOG_TAG, "list is null.");
             mMoviesList = newMoviesList;
             notifyItemRangeInserted(0, newMoviesList.size());//instead of notifyDataSetChanged();
-        } else {
-            /*
-              Otherwise we use DiffUtil to calculate the changes and update accordingly. This
-              shows the four methods you need to override to return a DiffUtil callback. The
-              old list is the current list stored in mMenuItems, where the new list is the new
-               values passed in from the observing the database.
-              **/
-            DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new DiffUtil.Callback() {
-                @Override
-                public int getOldListSize() {
-                    return mMoviesList.size();
-                }
-
-                @Override
-                public int getNewListSize() {
-                    return newMoviesList.size();
-                }
-
-                @Override
-                public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-                    return mMoviesList.get(oldItemPosition).getId() == newMoviesList.get(newItemPosition).getId();
-                }
-
-                @Override
-                public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-                    Movie oldItem = mMoviesList.get(oldItemPosition);
-                    Movie newItem = newMoviesList.get(newItemPosition);
-                    return oldItem.getId() == newItem.getId()
-                            && oldItem.getMovieName().equalsIgnoreCase(newItem.getMovieName())
-                            && oldItem.getVoteAverage().equalsIgnoreCase(newItem.getVoteAverage())
-                            && oldItem.getMoviePoster().equals(newItem.getMoviePoster());
-                }
-            });
-            mMoviesList = newMoviesList;
-            diffResult.dispatchUpdatesTo(this);
+        } else {//where setting is change and i had List!=null              //problem here
+            mMoviesList.clear();
+            mMoviesList.addAll(newMoviesList);
+            notifyItemRangeInserted(0, newMoviesList.size());//instead of notifyDataSetChanged();
         }
     }
 

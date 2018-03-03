@@ -1,8 +1,10 @@
 package android.magician.com.myappmovies.ui.main;
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.SharedPreferences;
 import android.magician.com.myappmovies.R;
+import android.magician.com.myappmovies.data.model.Movie;
 import android.magician.com.myappmovies.utilities.InjectorUtils;
 import android.magician.com.myappmovies.utilities.NetworkInfos;
 import android.support.annotation.Nullable;
@@ -18,6 +20,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import java.util.List;
 
 
 /**
@@ -47,10 +51,18 @@ public class MainActivityFragment extends Fragment implements SharedPreferences.
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {//worked
         Log.i(LOG_TAG, "Settings key changed: " + key);
+        hideListMovies();
         if (key.equals(getString(R.string.pref_sort_key))) {//still can't update data on fragment liast
             Log.i(LOG_TAG, "True : " + key);
             // TODO:(3) pass the new value to the network or db to generate new List order
-            subscribeUi();
+            mMainViewModel.getMoviesList().observe(this, new Observer<List<Movie>>() {
+                @Override
+                public void onChanged(@Nullable List<Movie> movies) {
+                    mMoviesAdapter.swapList(movies);
+                    showListMovies();
+                }
+            });
+
         }
 
     }
@@ -105,7 +117,7 @@ public class MainActivityFragment extends Fragment implements SharedPreferences.
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        //TODO: this code move to inside the fragment??or better to pass dataList to fragment??
+        // this code move to inside the fragment??or better to pass dataList to fragment??
         // first,because we can use communication between ViewModels and callback
         if (NetworkInfos.isNetworkConnectionAvailable(this.getContext())) {
                /* get MoviesList object by  create ModelView by using Factory & use repository*/
@@ -114,8 +126,7 @@ public class MainActivityFragment extends Fragment implements SharedPreferences.
               /* observe the data & pass it to the adapter*/
             mMainViewModel.getMoviesList().observe(this, movies -> {
                 mMoviesAdapter.swapList(movies);
-                mLoadingIndicator.setVisibility(View.INVISIBLE);
-                mRecyclerView.setVisibility(View.VISIBLE);
+                showListMovies();
             });
         } else {
             Toast.makeText(getContext(), "No Connection.", Toast.LENGTH_LONG).show();
@@ -137,13 +148,23 @@ public class MainActivityFragment extends Fragment implements SharedPreferences.
          /* observe the data & pass it to the adapter*/
             mMainViewModel.getMoviesList().observe(this, movies -> {
                 mMoviesAdapter.swapList(movies);
-                mLoadingIndicator.setVisibility(View.INVISIBLE);
-                mRecyclerView.setVisibility(View.VISIBLE);
+                showListMovies();
             });
         } else {
             Toast.makeText(getContext(), "No Connection.", Toast.LENGTH_LONG).show();
         }
     }
 
+    private void showListMovies() {
+        Log.i(LOG_TAG, "Show List");
+        mLoadingIndicator.setVisibility(View.INVISIBLE);
+        mRecyclerView.setVisibility(View.VISIBLE);
+    }
+
+    private void hideListMovies() {
+        Log.i(LOG_TAG, "Hide List");
+        mLoadingIndicator.setVisibility(View.VISIBLE);
+        mRecyclerView.setVisibility(View.INVISIBLE);
+    }
 
 }
